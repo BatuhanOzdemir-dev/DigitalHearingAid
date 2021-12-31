@@ -1,4 +1,4 @@
-function y = powerCompress(input, Psat,Fs);
+function y = powerCompress(input, Psat,Fs)
 % y = powerCompress(input, Psat,Fs)
 % Takes in a a signal makes sure that the maximum power in any frequency
 % is less than or equal to Psat.  Also had some denoising capabilities, by
@@ -12,7 +12,7 @@ len=Fs*0.1;
 iter=floor(length(x)/len);
 Plow=0.008;
  
-for rg=0:1:iter;
+for rg=0:1:iter
  start=rg*len+1;
  en= rg*len+len;
  if rg*len+len>length(x)
@@ -34,10 +34,10 @@ for k=0:N/2
    elseif Y_pow(k+1)>Psat          % Clip amplitudes higher than Psat
       Y_pow(k+1)=Psat;
       Y_pow(N-k)=Psat;
-   end;
+   end
    Y(k+1) = Y_pow(k+1)*(cos(X_phase(k+1))+i*sin(X_phase(k+1)));
 	Y(N-k) = Y_pow(N-k)*(cos(X_phase(N-k))+i*sin(X_phase(N-k)));
-end;
+end
 
 y = real(ifft(Y,N));
 
@@ -45,7 +45,7 @@ z = y(1:en-start+1);
 
 sig_out(start:en)=z;
 
-end;
+end
 
 y = sig_out*2000;
  %wavwrite(sig_out*1000,Fs,16,'output');

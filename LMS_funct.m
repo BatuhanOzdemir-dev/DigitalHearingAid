@@ -3,9 +3,9 @@ clear;
 close all;
 
 
-answer = inputdlg({'Frequancy 1','Frequancy 2','Frequancy 3','Frequancy 4'},'Please input frequancy spacings');
-frequancys = [str2float(answer{1}),str2float(answer{2}),str2float(answer{3}),str2float(answer{4})];
-
+answer = inputdlg({'Frequancy 1','Frequancy 2','Frequancy 3','Frequancy 4', 'Max Gain'},'Please input frequancy spacings and max gain');
+frequancys = [str2double(answer{1}),str2double(answer{2}),str2double(answer{3}),str2double(answer{4})];
+g = str2double(answer{5});
 
 %Program code of recording audio
 z=audiorecorder;
@@ -30,7 +30,7 @@ Ts = 1/Fs;
 order = 12;
 t = 0:Ts:1-Ts;
 %x = sin(2*pi*4*t);
-noise = 0.02*randn(size(x), 1);
+noise = 0.02*randn(size(x));
 x = x+noise;
 x = x/max(x);
 %Block to play audio and corresponding graph
@@ -51,6 +51,11 @@ mu = 0.03;
 lms = dsp.LMSFilter(order+1, 'StepSize', mu, 'WeightsOutputPort', true);
 [y,e,w] = step(lms, x,d);
 stem([b.' w]); title('System Identification by LMS Filter');
+
+
+y = applySkiSlope(y, g, frequancys, Fs);
+
+
 %Block to play audio and corresponding graph
 promptMessage=sprintf('Do want to play your recovered file?');
 titleBarCaption='Play';

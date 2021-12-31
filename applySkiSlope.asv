@@ -55,9 +55,6 @@ end
 
 % Sets the gain for the fourth stage of frequencies
 while(k/N <= fourth/fs)
-    if(k > N)
-        break;
-    end
    gain(k+1) = g;
    gain(N-k) = gain(k+1);
    k=k+1;
