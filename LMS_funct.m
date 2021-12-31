@@ -2,6 +2,11 @@ clc;
 clear;
 close all;
 
+
+answer = inputdlg({'Frequancy 1','Frequancy 2','Frequancy 3','Frequancy 4'},'Please input frequancy spacings');
+frequancys = [str2float(answer{1}),str2float(answer{2}),str2float(answer{3}),str2float(answer{4})];
+
+
 %Program code of recording audio
 z=audiorecorder;
 h=msgbox('Speak Up, I am Recording...','Recording');
@@ -25,7 +30,7 @@ Ts = 1/Fs;
 order = 12;
 t = 0:Ts:1-Ts;
 %x = sin(2*pi*4*t);
-noise = 0.02*randn(size(x));
+noise = 0.02*randn(size(x), 1);
 x = x+noise;
 x = x/max(x);
 %Block to play audio and corresponding graph
@@ -39,9 +44,8 @@ end
 figure;
     plot(x);
     title('Noisy Sound');
-
 %x = x';
-b = fir1(order,0.3,'low');
+b = fir1(order,0.2,'low');
 d = filter(b,1,x);
 mu = 0.03;
 lms = dsp.LMSFilter(order+1, 'StepSize', mu, 'WeightsOutputPort', true);
