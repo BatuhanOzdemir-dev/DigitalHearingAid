@@ -3,9 +3,10 @@ clear;
 close all;
 
 
-answer = inputdlg({'Frequancy 1','Frequancy 2','Frequancy 3','Frequancy 4', 'Max Gain'},'Please input frequancy spacings and max gain');
+answer = inputdlg({'Frequency 1','Frequency 2','Frequency 3','Frequency 4', 'Max Gain', 'Psat'},'Please input frequency spacings and max gain');
 frequancys = [str2double(answer{1}),str2double(answer{2}),str2double(answer{3}),str2double(answer{4})];
 g = str2double(answer{5});
+Psat = str2double(answer{6});
 
 %Program code of recording audio
 z=audiorecorder;
@@ -53,17 +54,17 @@ lms = dsp.LMSFilter(order+1, 'StepSize', mu, 'WeightsOutputPort', true);
 stem([b.' w]); title('System Identification by LMS Filter');
 
 
-y = applySkiSlope(y, g, frequancys, Fs);
-
+xf = applySkiSlope(y, g, frequancys, Fs);
+yt = powerCompress(xf, Psat, Fs);
 
 %Block to play audio and corresponding graph
 promptMessage=sprintf('Do want to play your recovered file?');
 titleBarCaption='Play';
 button = questdlg(promptMessage,titleBarCaption,'Yes', 'No','Yes');
 if strcmpi(button,'Yes')
-soundsc(y,Fs);
+soundsc(yt,Fs);
 else
 end
 figure;
-    plot(y);
+    plot(yt);
     title('Last Sound');
