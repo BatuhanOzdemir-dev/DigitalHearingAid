@@ -80,9 +80,9 @@ figure;%non-redundant filter transfer function
 k_v = k_v*fs;
 k_v = k_v(1:N/2+1);
 plot(k_v,gain(1:N/2+1));
-title('Frequency Shaper Transfer Function for Joe');
-xlabel('Frequency (Hertz)');
-ylabel('Gain');
+title('Frekans Şekillendirici Dönüşüm Fonksiyonu');
+xlabel('Frekans (Hertz)');
+ylabel('Kazanım (g)');
 
 Y = X+gain;
 y = real(ifft(Y,N));
@@ -90,7 +90,7 @@ y = real(ifft(Y,N));
 y = y(1:x_length);
 t=[0:1/fs:(x_length-1)/fs];
 figure;
-plot(t,y,'r');
+plot(t,y,'r'); title('Kazanım Eklenmiş Ses Çıktısı');
 %hold;
 figure;
-plot(t,x);
+plot(t,x); title('Gürültü Eklenmiş Ses');

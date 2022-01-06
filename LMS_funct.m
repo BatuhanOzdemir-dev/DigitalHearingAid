@@ -9,9 +9,9 @@ g = str2double(answer{5});
 Psat = str2double(answer{6});
 
 %Program code of recording audio
-z=audiorecorder;
+z=audiorecorder(20000,16,1);
 h=msgbox('Speak Up, I am Recording...','Recording');
-recordblocking(z,5); %Records a 15 sec audio
+recordblocking(z,5); %Records a 5 sec audio
 delete(h);
 x = getaudiodata(z);
 %Block to play audio and corresponding graph
@@ -24,14 +24,14 @@ else
 end
 figure;
     plot(x);
-    title('Recorded Sound');
+    title('Kaydedilen Ses');
 
-Fs = 9000;
+Fs = 20000;
 Ts = 1/Fs;
 order = 12;
 t = 0:Ts:1-Ts;
 %x = sin(2*pi*4*t);
-noise = 0.02*randn(size(x));
+noise = 0.015*randn(size(x));
 x = x+noise;
 x = x/max(x);
 %Block to play audio and corresponding graph
@@ -44,16 +44,30 @@ else
 end
 figure;
     plot(x);
-    title('Noisy Sound');
+    title('Gürültü Eklenmiş Ses');
 %x = x';
 b = fir1(order,0.2,'low');
 d = filter(b,1,x);
 mu = 0.03;
 lms = dsp.LMSFilter(order+1, 'StepSize', mu, 'WeightsOutputPort', true);
 [y,e,w] = step(lms, x,d);
-stem([b.' w]); title('System Identification by LMS Filter');
+stem([b.' w]); title('LMS Filtresinin Sistem Görünümü');
+hold;
 
+% testing
+figure;
+    plot(y);
+    title('Kazanım Eklenmemiş Sinyal');
 
+promptMessage=sprintf('Play the filtered signal without gain implemented?')
+titleBarCaption='Play';
+button = questdlg(promptMessage,titleBarCaption,'Yes', 'No','Yes');
+if strcmpi(button,'Yes')
+soundsc(y,Fs);
+else
+end
+
+figure;
 xf = applySkiSlope(y, g, frequancys, Fs);
 yt = powerCompress(xf, Psat, Fs);
 
@@ -67,4 +81,4 @@ else
 end
 figure;
     plot(yt);
-    title('Last Sound');
+    title('Sesin Son Çıktısı');
