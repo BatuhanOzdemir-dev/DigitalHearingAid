@@ -47,8 +47,8 @@ end
 figure;
     plot(x);
     title('Noise Added Sound');
-% Low pass filter and noise reduction
-b = fir1(order,0.2,'low');
+
+b = fir1(order,0.2,'low'); % Low pass filter
 d = filter(b,1,x);
 mu = 0.03;
 lms = dsp.LMSFilter(order+1, 'StepSize', mu, 'WeightsOutputPort', true);
@@ -61,7 +61,6 @@ figure;
     plot(y);
     title('No Gain Added Signal');
 
-% Block to play audio for testing how noise reduction filter works
 promptMessage=sprintf('Play the filtered signal without gain implemented?');
 titleBarCaption='Play';
 button = questdlg(promptMessage,titleBarCaption,'Yes', 'No','Yes');

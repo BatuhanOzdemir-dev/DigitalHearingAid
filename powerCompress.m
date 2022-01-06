@@ -11,7 +11,7 @@ x=input;
 len=Fs*0.1;
 iter=floor(length(x)/len);
 Plow=0.008;
- 
+
 for rg=0:1:iter
  start=rg*len+1;
  en= rg*len+len;
